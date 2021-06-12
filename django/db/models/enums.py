@@ -98,5 +98,5 @@ class TextChoices(str, Choices):
 
     def to_field(self, **kwargs):
         """Create a model field for these choices."""
-        max_length = max(len(choice) for choice in self.choices)
+        max_length = max(len(value) for value in self.values)
         return CharField(max_length=max_length, **kwargs)
