@@ -83,7 +83,11 @@ class Choices(enum.Enum, metaclass=ChoicesMeta):
 
 class IntegerChoices(int, Choices):
     """Class for creating enumerated integer choices."""
-    pass
+
+    @classmethod
+    def to_field(cls, **kwargs):
+        """Create a field for this IntegerChoice"""
+        return IntField(choices=self.choices, **kwargs)
 
 
 class TextChoices(str, Choices):
@@ -91,3 +95,8 @@ class TextChoices(str, Choices):
 
     def _generate_next_value_(name, start, count, last_values):
         return name
+
+    def to_field(self, **kwargs):
+        """Create a model field for these choices."""
+        max_length = max(len(choice) for choice in self.choices)
+        return CharField(max_length=max_length, **kwargs)
